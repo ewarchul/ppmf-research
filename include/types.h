@@ -5,7 +5,8 @@
 #include <functional>
 #include <vector>
 
-using FitnessFunction = std::function<double(std::vector<double>, const int)>;
-using DummyPopulation = std::vector<Eigen::VectorXd>;
+
+using Vec = Eigen::VectorXd;
+using Matrix = Eigen::MatrixXd;
 
 #endif
