@@ -1,12 +1,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <eigen3/Eigen/Eigen>
 #include <functional>
 #include <vector>
+#include <blaze/Math.h>
 
-
-using Vec = Eigen::VectorXd;
-using Matrix = Eigen::MatrixXd;
+using Vec = blaze::DynamicVector<double>;
+using Matrix = blaze::DynamicMatrix<double>;
 
 #endif

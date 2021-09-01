@@ -1,16 +1,21 @@
 #include "../include/parameters.h"
 
-Parameters::Parameters(const int dim, const Vec &x0, const double sigma,
-                       const int lambda)
-    : m_dim(dim), m_x0(x0), m_init_sigma(sigma), m_init_lambda(lambda) {
+#include <iostream>
+
+Parameters::Parameters(const int dim, const Vec &x0, const double sigma)
+    : m_dim(dim), m_x0(x0), m_init_sigma(sigma) {
+  m_init_lambda = 4 + std::floor(3 * std::log(m_dim));
+  m_lbound = Vec(m_dim, utils::get_default_lower_bound());
+  m_ubound = Vec(m_dim, utils::get_default_upper_bound());
   init();
 };
 
-Parameters::Parameters(const Vec &x0, const double sigma, const int lambda)
-    : m_x0(x0), m_init_sigma(sigma), m_init_lambda(lambda) {
-  m_dim = x0.cols();
-  m_lbound.setConstant(m_dim, utils::get_default_lower_bound());
-  m_ubound.setConstant(m_dim, utils::get_default_upper_bound());
+Parameters::Parameters(const Vec &x0, const double sigma)
+    : m_x0(x0), m_init_sigma(sigma) {
+  m_dim = x0.size();
+  m_lbound = Vec(m_dim, utils::get_default_lower_bound());
+  m_ubound = Vec(m_dim, utils::get_default_upper_bound());
+  m_init_lambda = 4 + std::floor(3 * std::log(m_dim));
   init();
 };
 
@@ -18,7 +23,7 @@ Parameters::Parameters(const Vec &x0, const double sigma, const int lambda,
                        const Vec &lbound, const Vec &ubound)
     : m_x0(x0), m_init_sigma(sigma), m_init_lambda(lambda), m_lbound(lbound),
       m_ubound(ubound) {
-  m_dim = x0.cols();
+  m_dim = x0.size();
   init();
 };
 
@@ -29,21 +34,12 @@ void Parameters::init() {
   m_chi = std::sqrt(m_dim) *
           (1.0 - (1.0 / (4.0 * m_dim)) + 1.0 / (21.0 * std::pow(m_dim, 2)));
   m_cs = (m_mu_eff + 2) / (m_dim + m_mu_eff + 3);
-  m_mu_weights.resize(m_dim);
-  std::generate(m_mu_weights.begin(), m_mu_weights.end(),
-                [mu = m_mu, i = 0]() mutable -> double {
-                  return std::log(mu + 1) - std::log(i + 1);
-                });
-  m_mu_sum_weights = std::accumulate(m_mu_weights.begin(), m_mu_weights.end(),
-                                     0, std::plus<double>());
-  std::for_each(m_mu_weights.begin(), m_mu_weights.end(),
-                [sum_weights = m_mu_sum_weights](double &w) -> double {
-                  return w / sum_weights;
-                });
-
-  double mu_sum_sq = std::accumulate(m_mu_weights.begin(), m_mu_weights.end(),
-                                     0, utils::pow_n_plus<double, 2>());
-  m_mu_eff = std::pow(m_mu_sum_weights, 2) / mu_sum_sq;
+  m_mu_weights =
+      blaze::log(m_mu + 0.5) - blaze::log(blaze::linspace(m_mu, 1, m_mu));
+  m_mu_sum_weights = blaze::sum(m_mu_weights);
+  m_mu_weights = m_mu_weights / m_mu_sum_weights;
+  m_mu_eff = std::pow(blaze::sum(m_mu_weights), 2) /
+             blaze::sum(blaze::pow(m_mu_weights, 2));
   m_cc = 4.0 / (m_dim + 4);
   m_cmu = m_mu_eff;
   m_ccov = (1.0 / m_cmu) * 2.0 / std::pow((m_dim + 1.4), 2) +

@@ -22,7 +22,8 @@ private:
   Population ask();
   void tell();
   bool terminate();
-  void increase_iter();
+  void inc_iter();
+  void inc_evals();
 
   Parameters m_parameters;
   Solutions m_solutions;
