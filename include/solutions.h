@@ -6,10 +6,14 @@
 
 class Solutions {
 public:
-  Solutions(Parameters &params);
-
-  friend std::ostream &utils::print_solutions(const Solutions &sol,
-                                              std::ostream &output);
+  Solutions(Parameters &params)
+      : m_iter(0), m_evals(0), m_sigma(1), m_ptarget(0), m_dumpparam(0) {
+    auto dim = static_cast<std::size_t>(params.get_dim());
+    m_sigma_evopath = Vec(dim, 0);
+    m_cov_evopath = Vec(dim, 0);
+    m_xmean =
+        blaze::generate(dim, [](std::size_t) { return 5; });
+  }
 
   Matrix get_covariance_matrix(Matrix &&mat) const { return m_covariance_mat; }
   Population get_population(Population &&pop) const { return m_pop; }

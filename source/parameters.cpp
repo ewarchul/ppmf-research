@@ -71,4 +71,7 @@ int Parameters::get_max_eval() const { return m_max_eval; }
 
 int Parameters::get_max_iter() const { return m_max_iter; }
 
+int Parameters::get_dim() const { return m_dim; }
+
 double Parameters::get_mu_eff() const { return m_mu_eff; }
+
