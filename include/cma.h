@@ -1,10 +1,16 @@
-class ClassicCovarianceMatrixUpdate {
+#ifndef CMA_H
+#define CMA_H
+
+#include "solutions.h"
+
+class ClassicCMA {
 public:
-  static void update();
+  static void update(Solutions &solutions, Parameters &params) {}
 };
 
-class IdleCovarianceMatrixUpdate {
-  public:
-    static void update();
+class IdleCMA {
+public:
+  static void update(Solutions &solutions, Parameters &params) {}
 };
 
+#endif

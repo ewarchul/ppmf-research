@@ -1,19 +1,30 @@
-class csa_sa {
+#ifndef SIGMA_ADAPTATION_H
+#define SIGMA_ADAPTATION_H
+#include "solutions.h"
+
+class CSA {
 public:
-  static void update();
+  static void update(Solutions &solutions, Parameters &params);
 };
 
-class ppmf_sa {
+class PPMF {
 public:
-  static void update();
+  static void update(Solutions &solutions, Parameters &params);
 };
 
-class msr_sa {
+class MSR {
 public:
-  static void update();
+  static void update(Solutions &solutions, Parameters &params);
 };
 
-class psr_sa {
+class PSR {
 public:
-  static void update();
+  static void update(Solutions &solutions, Parameters &params);
 };
+
+class IdentitySigmAdaptation {
+public:
+  static void update(Solutions &solutions, Parameters &params);
+};
+
+#endif

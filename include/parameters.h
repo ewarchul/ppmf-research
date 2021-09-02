@@ -28,6 +28,7 @@ public:
   int get_init_lambda() const;
   int get_max_eval() const;
   int get_max_iter() const;
+  int get_dim() const;
   double get_mu_eff() const;
 
   void set_termination_criteria(TerminationCriteria term_crit);
