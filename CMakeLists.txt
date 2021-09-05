@@ -21,7 +21,7 @@ file(GLOB_RECURSE INC_FILES "${PROJECT_SOURCE_DIR}/include/*.h")
 file(GLOB_RECURSE TEST_FILES "${PROJECT_SOURCE_DIR}/tests/*.cpp")
 
 
-set(CLANG_DEBUG_FLAGS " -Wextra-tokens -Wambiguous-member-template -Wshadow -Wall
+set(CLANG_DEBUG_FLAGS " -Wextra-tokens -Wambiguous-member-template -g -Wshadow -Wall
 -pedantic -Wextra ${CODE_CONTROL_FLAGS}")
 
 set(CLANG_RELEASE_FLAGS " -O3 -finline-functions -fmerge-all-constants
@@ -41,10 +41,15 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     message(STATUS "Compiling with gcc")
 endif()
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build")
 
+find_package(LAPACK REQUIRED)
+
+if (LAPACK_FOUND)
+  set(LAPACK_LIB "${LAPACK_LIBRARIES}")
+else()
+  message(ERROR " Can't find LAPACK!")
+endif()
 
 add_executable(${cmaes_target} main.cpp ${SRC_FILES} ${INC_FILES})
 target_link_libraries(${cmaes_target} ${CONAN_LIBS})

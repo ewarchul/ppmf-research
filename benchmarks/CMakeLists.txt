@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_OBJCXX_STANDARD True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(benchmark "benchmark")
+set(benchmark "cmaes_benchmark")
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -42,6 +42,11 @@ else()
 endif()
 
 
-add_executable(${benchmark} main.cpp)
+file(GLOB_RECURSE SRC_FILES "${PROJECT_SOURCE_DIR}/source/*.cpp")
+file(GLOB_RECURSE INC_FILES "${PROJECT_SOURCE_DIR}/../include/*.h")
+file(GLOB_RECURSE INC_REF_FILES "${PROJECT_SOURCE_DIR}/../references/*.h")
+
+
+add_executable(${benchmark} ${SRC_FILES} ${INC_FILES} ${INC_REF_FILES})
 target_link_libraries(${benchmark} ${CONAN_LIBS} ${LAPACK_LIB})
 

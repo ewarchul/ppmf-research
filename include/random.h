@@ -23,13 +23,14 @@ auto random_matrix(std::size_t nrow, std::size_t ncol, RandomGenerator &rand,
 } // namespace internal
 } // namespace blaze
 
-template <typename RandomGenerator, typename Distribution> class RandomMatrix {
+template <typename RandomGenerator = std::mt19937,
+          typename Distribution = std::uniform_real_distribution<double>>
+class RandomMatrix {
 public:
-  RandomMatrix() = delete;
-  RandomMatrix(const uint64_t &seed) : m_rng_seed(seed) {}
+  RandomMatrix(const uint64_t &seed) : m_seed(seed) {}
   RandomMatrix(const Vec &mean, const Matrix &cov, const uint64_t &seed)
-      : m_mean(mean), m_rng_seed(seed) {
-    m_rng(m_rng_seed);
+      : m_mean(mean), m_seed(seed) {
+    m_rng.seed(m_seed);
     set_covariance(cov);
   }
   Matrix sample(size_t lambda) {
@@ -51,7 +52,7 @@ private:
   Matrix m_L_Cholesky;
   mutable RandomGenerator m_rng;
   mutable Distribution m_dist;
-  uint64_t m_rng_seed = std::mt19937::default_seed;
+  uint64_t m_seed;
   size_t m_dim;
 };
 

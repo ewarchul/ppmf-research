@@ -3,6 +3,7 @@ fmt/8.0.0
 spdlog/1.9.0
 boost/1.76.0
 blaze/3.8
+eigen/3.4.0
 
 [generators]
 cmake
