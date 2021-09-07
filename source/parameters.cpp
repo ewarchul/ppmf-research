@@ -61,7 +61,7 @@ Vec Parameters::get_x0() const { return m_x0; }
 
 Vec Parameters::get_lower_bound() const { return m_lbound; }
 
-Vec Parameters::get_upper_bound() const { return m_lbound; }
+Vec Parameters::get_upper_bound() const { return m_ubound; }
 
 double Parameters::get_init_sigma() const { return m_init_sigma; }
 

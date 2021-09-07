@@ -52,10 +52,10 @@ else()
 endif()
 
 add_executable(${cmaes_target} main.cpp ${SRC_FILES} ${INC_FILES})
-target_link_libraries(${cmaes_target} ${CONAN_LIBS})
+target_link_libraries(${cmaes_target} ${CONAN_LIBS} ${LAPACK_LIB})
 
 add_executable(${test_target} ${TEST_FILES} ${INC_FILES} ${SRC_FILES})
-target_link_libraries(${test_target} ${CONAN_LIBS})
+target_link_libraries(${test_target} ${CONAN_LIBS} ${LAPACK_LIB} )
 
 add_test(NAME cmaes_test COMMAND
   "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${test_target}")

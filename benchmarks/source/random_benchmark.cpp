@@ -7,7 +7,7 @@
 static void RandomMatrix_SCtor(benchmark::State &state) {
   uint64_t seed = 10;
   for (auto _ : state) {
-    RandomMatrix random(seed);
+    RandomMatrixGenerator random(seed);
   }
 }
 
@@ -22,7 +22,7 @@ static void RandomMatrix_Ctor(benchmark::State &state) {
     blaze::IdentityMatrix<double, blaze::rowMajor> covariance(dim);
     auto cov_mat = blaze::declid(covariance);
     state.ResumeTiming();
-    RandomMatrix random(mean, cov_mat, seed);
+    RandomMatrixGenerator random(mean, cov_mat, seed);
   }
 }
 
@@ -37,7 +37,7 @@ static void RandomMatrix_Sampling(benchmark::State &state) {
     Vec mean(dim, 1); 
     blaze::IdentityMatrix<double, blaze::rowMajor> covariance(dim);
     auto cov_mat = blaze::declid(covariance);
-    RandomMatrix random(mean, cov_mat, seed);
+    RandomMatrixGenerator random(mean, cov_mat, seed);
     state.ResumeTiming();
     random.sample(lambda);
   }

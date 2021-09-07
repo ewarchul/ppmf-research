@@ -1,34 +1,22 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
-#include "types.h"
+
+
 #include <blaze/Blaze.h>
 #include <cstddef>
 #include <random>
 
-namespace blaze {
-namespace internal {
-template <typename RandomGenerator, typename Distribution>
-auto random_vec(std::size_t size, RandomGenerator &rand, Distribution &dist)
-    -> decltype(auto) {
-  return blaze::generate(size, [&rand, &dist](size_t) { return dist(rand); });
-}
-
-template <typename RandomGenerator, typename Distribution>
-auto random_matrix(std::size_t nrow, std::size_t ncol, RandomGenerator &rand,
-                   Distribution &dist) -> decltype(auto) {
-  return blaze::generate(nrow, ncol,
-                         [&rand, &dist](size_t, size_t) { return dist(rand); });
-}
-} // namespace internal
-} // namespace blaze
+#include "types.h"
+#include "math.h"
 
 template <typename RandomGenerator = std::mt19937,
-          typename Distribution = std::uniform_real_distribution<double>>
-class RandomMatrix {
+          typename Distribution = std::normal_distribution<double>>
+class RandomMatrixGenerator {
 public:
-  RandomMatrix(const uint64_t &seed) : m_seed(seed) {}
-  RandomMatrix(const Vec &mean, const Matrix &cov, const uint64_t &seed)
+  RandomMatrixGenerator() {}
+  RandomMatrixGenerator(const uint64_t &seed) : m_seed(seed) {}
+  RandomMatrixGenerator(const Vec &mean, const Matrix &cov, const uint64_t &seed)
       : m_mean(mean), m_seed(seed) {
     m_rng.seed(m_seed);
     set_covariance(cov);
@@ -52,7 +40,7 @@ private:
   Matrix m_L_Cholesky;
   mutable RandomGenerator m_rng;
   mutable Distribution m_dist;
-  uint64_t m_seed;
+  uint64_t m_seed = 5;
   size_t m_dim;
 };
 

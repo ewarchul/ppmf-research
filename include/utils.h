@@ -8,7 +8,6 @@
 #include <iostream>
 #include <ostream>
 #include <spdlog/spdlog.h>
-#include <type_traits>
 
 #include "types.h"
 
@@ -40,24 +39,6 @@ template <size_t N, typename T> constexpr T F_sphere(const T *x) {
   return val;
 };
 } // namespace evalfuncs
-
 } // namespace utils
-
-namespace blaze {
-namespace internal {
-
-template <typename TM, bool SO = blaze::columnMajor, typename VectorFunc>
-blaze::DynamicVector<TM> apply(const blaze::DynamicMatrix<TM, SO> &dm,
-                               VectorFunc op) {
-  size_t ncol = dm.columns();
-  size_t nrow = dm.rows();
-  blaze::DynamicVector<TM> ret(ncol);
-  for (size_t i = 0; i < ncol; ++i) {
-    ret[i] = op(blaze::column(dm, i).data(), nrow);
-  }
-  return ret;
-}
-} // namespace internal
-} // namespace blaze
 
 #endif
